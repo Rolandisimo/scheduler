@@ -1,4 +1,7 @@
-import { StyleSheet } from "react-native";
+import {
+    StyleSheet,
+    Dimensions,
+} from "react-native";
 
 export default StyleSheet.create({
     container: {
@@ -6,14 +9,26 @@ export default StyleSheet.create({
         backgroundColor: '#fff',
         marginTop: 20,
     },
-    header: {
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "space-between",
-        alignItems: "center",
+});
+
+
+export const generalStyles = StyleSheet.create({
+    smallTitle: {
+        fontSize: 20,
+        color: "#34495e",
+    },
+    buttonMain: {
+        borderWidth: 1,
+        borderColor: "rgba(46, 204, 113, .8)",
         padding: 10,
-        shadowColor: "rgba(189, 195, 199, 0.7)",
-        shadowOpacity: 1.0,
-        shadowOffset: { height: 2 },
+        borderRadius: 5,
+    },
+    breakline: {
+        height: 1,
+        width: Dimensions.get("window").width / 10,
+        backgroundColor: "rgba(189, 195, 199, 0.7)",
+        marginTop: 10,
+        marginBottom: 10,
+        alignSelf: "center",
     },
 });
