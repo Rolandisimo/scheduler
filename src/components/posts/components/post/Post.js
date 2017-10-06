@@ -8,7 +8,7 @@ import {
 import FAIcon from 'react-native-vector-icons/FontAwesome'
 
 import { PostStatus } from "../postStatus/PostStatus";
-import { PostImage } from "../postImage/PostImage";
+import { PostImageConnected } from "../postImage/PostImage";
 import { PostBody } from "../postBody/PostBody";
 import styles from "./styles";
 
@@ -38,7 +38,7 @@ export class Post extends React.Component {
                     postReady={post.ready}
                     handlePublish={handlePublish}
                 />
-                <PostImage postUrl={post.url} />
+                <PostImageConnected postUrl={post.url} />
                 <PostBody
                     postAvatar={post.avatar}
                     postAuthor={post.author}

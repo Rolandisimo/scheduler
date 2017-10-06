@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import { Post } from "./components/post/Post";
 import {
     publishPost,
+    getPosts,
 } from "../../ducks/posts";
 
 import styles from "./styles";
@@ -50,7 +51,7 @@ export class Posts extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-    posts: state.get("posts"),
+    posts: getPosts(state),
 });
 
 const mapDispatchToProps = {

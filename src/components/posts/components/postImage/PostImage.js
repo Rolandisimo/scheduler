@@ -1,12 +1,14 @@
 import React, { PropTypes } from 'react';
 import { Image } from 'react-native';
+import { connect } from "react-redux";
 
+import { getPlaceholder } from "../../../../ducks/posts";
 import styles from "./styles";
-const placeholder = require("../../../../assets/images/placeholder.jpeg");
 
 export class PostImage extends React.PureComponent {
     static propTypes = {
         postUrl: PropTypes.string,
+        placeholder: PropTypes.number,
     };
     render() {
         return (
@@ -15,8 +17,14 @@ export class PostImage extends React.PureComponent {
                 resizeMethod="resize"
                 resizeMode="cover"
                 style={styles.postImage}
-                defaultSource={placeholder} // TODO: Change to something decent
+                defaultSource={this.props.placeholder} // TODO: Change to something decent
             />
         );
     }
 }
+
+const mapStateToProps = state => ({
+    placeholder: getPlaceholder(state),
+});
+
+export const PostImageConnected = connect(mapStateToProps)(PostImage);
