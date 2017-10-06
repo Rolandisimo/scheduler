@@ -1,10 +1,10 @@
-import React, { PropTypes } from 'react';
+import React, { PropTypes } from "react";
 import {
     Text,
     View,
     TouchableOpacity,
-} from 'react-native';
-import FAIcon from 'react-native-vector-icons/FontAwesome'
+} from "react-native";
+import FAIcon from "react-native-vector-icons/FontAwesome";
 
 import styles from "./styles";
 import { generalStyles } from "../../../main/styles";

@@ -6,7 +6,7 @@ import { Post } from "./components/post/Post";
 import {
     publishPost,
     getPosts,
-} from "../../ducks/posts";
+} from "../../ducks/common";
 
 import styles from "./styles";
 

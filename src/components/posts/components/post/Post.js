@@ -1,11 +1,11 @@
-import React, { PropTypes } from 'react';
+import React, { PropTypes } from "react";
 import {
     Text,
     View,
     TouchableOpacity,
     Image,
-} from 'react-native';
-import FAIcon from 'react-native-vector-icons/FontAwesome'
+} from "react-native";
+import FAIcon from "react-native-vector-icons/FontAwesome"
 
 import { PostStatus } from "../postStatus/PostStatus";
 import { PostImageConnected } from "../postImage/PostImage";

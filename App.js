@@ -5,10 +5,10 @@ import {
     View,
     Button,
 } from 'react-native';
-import { createStore } from "redux";
+import { createStore, combineReducers } from "redux";
 import { Provider } from "react-redux";
+import reducer from "./src/ducks/common";
 
-import reducer from "./src/ducks/posts";
 import Main from "./src/components/main/Main";
 
 export default class App extends React.Component {

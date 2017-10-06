@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import { Image } from 'react-native';
 import { connect } from "react-redux";
 
-import { getPlaceholder } from "../../../../ducks/posts";
+import { getPlaceholder } from "../../../../ducks/common";
 import styles from "./styles";
 
 export class PostImage extends React.PureComponent {
