@@ -1,7 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 
-import { Posts } from "../posts/Posts";
+import { PostsConnected } from "../posts/Posts";
 import { Header } from "../header/Header";
 import styles from "./styles";
 
@@ -10,7 +10,7 @@ export default class Main extends React.PureComponent {
         return (
         <View style={styles.container}>
             <Header />
-            <Posts />
+            <PostsConnected />
         </View>
         );
     }

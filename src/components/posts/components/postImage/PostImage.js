@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react';
 import { Image } from 'react-native';
 
 import styles from "./styles";
+const placeholder = require("../../../../assets/images/placeholder.jpeg");
 
 export class PostImage extends React.PureComponent {
     static propTypes = {
@@ -14,6 +15,7 @@ export class PostImage extends React.PureComponent {
                 resizeMethod="resize"
                 resizeMode="cover"
                 style={styles.postImage}
+                defaultSource={placeholder} // TODO: Change to something decent
             />
         );
     }
