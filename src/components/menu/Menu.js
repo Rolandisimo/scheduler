@@ -49,11 +49,10 @@ export class Menu extends React.PureComponent {
                     size={30}
                     onPress={this.props.toggleMenu}
                 />
-                <Text style={styles.item}>Menu Item</Text>
-                <Text style={styles.item}>Menu Item</Text>
-                <Text style={styles.item}>Menu Item</Text>
-                <Text style={styles.item}>Menu Item</Text>
-                <Text style={styles.item}>Menu Item</Text>
+                <Text style={styles.item}>Home</Text>
+                <Text style={styles.item}>Posts</Text>
+                <Text style={styles.item}>Profile</Text>
+                <Text style={styles.item}>Statistics</Text>
             </Animated.View>
         );
     }

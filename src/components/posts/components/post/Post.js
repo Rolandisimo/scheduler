@@ -1,4 +1,5 @@
-import React, { PropTypes } from "react";
+import React  from "react";
+import PropTypes from "prop-types";
 import {
     Text,
     View,
@@ -11,7 +12,7 @@ import { PostStatus } from "../postStatus/PostStatus";
 import { PostImageConnected } from "../postImage/PostImage";
 import { PostBody } from "../postBody/PostBody";
 import styles from "./styles";
-
+  
 export class Post extends React.Component {
     static propTypes = {
         post: PropTypes.shape({
@@ -25,18 +26,18 @@ export class Post extends React.Component {
         handlePublish: PropTypes.func,
     };
     render() {
-        const {
-            post,
-            handlePublish,
-        } = this.props;
+        const { navigation: { state: { params } } } = this.props
+        const post = params || this.props.post;
+
         return (
             <TouchableOpacity
                 style={styles.post}
                 activeOpacity={.8}
+                onPress={() => this.props.navigation.navigate("EditPost", post)}
             >
                 <PostStatus
                     postReady={post.ready}
-                    handlePublish={handlePublish}
+                    handlePublish={this.props.handlePublish}
                 />
                 <PostImageConnected postUrl={post.url} />
                 <PostBody

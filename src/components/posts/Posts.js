@@ -1,6 +1,8 @@
-import React from 'react';
-import { VirtualizedList, Text } from 'react-native';
+import React from "react";
+import PropTypes from "prop-types";
+import { VirtualizedList, Text } from "react-native";
 import { connect } from "react-redux";
+import { List } from "immutable";
 
 import { Post } from "./components/post/Post";
 import {
@@ -20,7 +22,7 @@ export class Posts extends React.Component {
         this.getItem = this.getItem.bind(this);
     }
     render() {
-        // TODO: Fix slow performance with many posts
+        // TODO: Fix slow performance with many postss
         return (
             <VirtualizedList
                 style={styles.container}
@@ -32,12 +34,15 @@ export class Posts extends React.Component {
             />
         );
     }
-    /**
-     * 
-     * @param {{ url: string, author: string, avatar: string, date: string, caption: string, ready: boolean, }[]} posts 
-     */
+
     renderPosts(item) {
-        return <Post post={item.item} handlePublish={() => this.props.handlePublish(item.index)}/>;
+        return (
+            <Post
+                post={item.item}
+                handlePublish={() => this.props.handlePublish(item.index)}
+                navigation={this.props.navigation}
+            />
+        );
     }
     renderPostsKeys(post) {
         return `${post.author}_${post.date}_${Math.random() * 10000}`;
@@ -62,3 +67,10 @@ export const PostsConnected = connect(
     mapStateToProps,
     mapDispatchToProps,
 )(Posts)
+
+
+Posts.propTypes = {
+    posts: PropTypes.instanceOf(List),
+    navigation: PropTypes.object,
+    handlePublish: PropTypes.func.isRequired,
+};

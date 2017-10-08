@@ -1,9 +1,0 @@
-{
-    "include": [
-        "src/**/*.tsx?"
-    ],
-    "exclude": [
-        "node_modules",
-        ".expo"
-    ]
-}

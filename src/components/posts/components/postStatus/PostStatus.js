@@ -7,7 +7,7 @@ import {
 import FAIcon from "react-native-vector-icons/FontAwesome";
 
 import styles from "./styles";
-import { generalStyles } from "../../../main/styles";
+import { generalStyles } from "../../../../../AppStyles";
 
 export class PostStatus extends React.PureComponent {
     static propTypes = {
