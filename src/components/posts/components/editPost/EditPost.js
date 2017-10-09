@@ -7,15 +7,20 @@ import {
     ScrollView,
     TextInput,
     Switch,
+    ImagePickerIOS,
+    DatePickerIOS,
+    DatePickerAndroid,
+    Platform,
+    Button,
 } from "react-native";
 import FAIcon from "react-native-vector-icons/FontAwesome"
-import KeyboardSpacer from 'react-native-keyboard-spacer';
+import DatePicker from "react-native-datepicker"
 
 import { PostStatus } from "../postStatus/PostStatus";
 import { PostImageConnected } from "../postImage/PostImage";
 import { PostBody } from "../postBody/PostBody";
-import styles from "./styles";
-  
+import styles, { datePickerCustomStyles } from "./styles";
+
 export class EditPost extends React.Component {
     static propTypes = {
         navigation: PropTypes.shape({
@@ -37,30 +42,55 @@ export class EditPost extends React.Component {
         caption: this.props.navigation.state.params.caption,
         hashtags: "",
         hashtagsAddedToCaption: false,
+        imageUri: "",
+        isFocused: false,
+        remindDate: "",
     };
     constructor(props) {
         super(props);
 
-        this.handleHashtagsEdit = this.handleHashtagsEdit.bind(this);
-        this.handleCaptionEdit = this.handleCaptionEdit.bind(this);
-        this.handleAddHashtagsToCaption = this.handleAddHashtagsToCaption.bind(this);
+        this.onHashtagsEdit = this.onHashtagsEdit.bind(this);
+        this.onCaptionEdit = this.onCaptionEdit.bind(this);
+        this.onAddHashtagsToCaption = this.onAddHashtagsToCaption.bind(this);
+        this.onImageEdit = this.onImageEdit.bind(this);
+        this.onFocus = this.onFocus.bind(this);
+        this.onEndEditing = this.onEndEditing.bind(this);
+        this.onDateChange = this.onDateChange.bind(this);
+        this.onSubmit = this.onSubmit.bind(this);
     }
+    scrollViewRef;
     render() {
         const { navigation: { state: { params } } } = this.props
         const EditIcon = (
             <FAIcon
                 name="pencil"
                 style={styles.editIcon}
-                color="rgba(189, 195, 199, .8)"
+                color="rgba(46, 204, 113, .5)"
                 size={45}
             />
-        ); 
+        );
+
+        const now = new Date();
+        const reminderDate = this.state.remindDate ? new Date(this.state.remindDate) : now;
+        const DateComponent = <DatePicker
+            format="YYYY-MM-DD"
+            minDate={now}
+            confirmBtnText="Confirm"
+            cancelBtnText="Cancel"
+            onDateChange={this.onDateChange}
+            date={this.state.remindDate || now}
+            showIcon={false}
+            style={styles.datePicker}
+            androidMode="spinner"
+            customStyles={datePickerCustomStyles}
+        />;
 
         return (
-            <ScrollView style={styles.post}>
+            <ScrollView style={[styles.post, this.state.isFocused && { marginBottom: 200 }]}>
                 <PostImageConnected
-                    postUrl={params.url}
+                    postUrl={this.state.imageUri || params.url}
                     editIcon={EditIcon}
+                    onPress={this.onImageEdit}
                 />
                 <View style={styles.formGroup}>
                     <Text style={styles.label}>
@@ -70,10 +100,12 @@ export class EditPost extends React.Component {
                         style={styles.input}
                         defaultValue={""}
                         placeholder="#wow Amazing hashtag #yolo"
-                        onChangeText={this.handleHashtagsEdit}
+                        onChangeText={this.onHashtagsEdit}
                         autoCorrect={false}
                         autoCapitalize="none"
                         returnKeyType="done"
+                        onFocus={this.onFocus}
+                        onEndEditing={this.onEndEditing}
                     />
                     <View style={styles.formGroupSub}>
                         <Text style={styles.label}>
@@ -82,7 +114,7 @@ export class EditPost extends React.Component {
                         </Text>
                         <Switch
                             value={this.state.hashtagsAddedToCaption}
-                            onValueChange={this.handleAddHashtagsToCaption}
+                            onValueChange={this.onAddHashtagsToCaption}
                         />
                     </View>
                 </View>
@@ -91,14 +123,24 @@ export class EditPost extends React.Component {
                     <TextInput
                         defaultValue={params.caption}
                         placeholder="Posts' caption"
-                        onChangeText={this.handleCaptionEdit}
+                        onChangeText={this.onCaptionEdit}
                         autoCorrect={false}
                         multiline={true}
                         style={styles.input}
                         value={this.state.caption}
+                        onFocus={this.onFocus}
+                        onEndEditing={this.onEndEditing}
                     />
                 </View>
-                <KeyboardSpacer />
+                <View style={styles.formGroup}>
+                    <Text style={styles.label}>Reminder date</Text>
+                    {DateComponent}
+                </View>
+                <Button
+                    onPress={this.onSubmit}
+                    title="Submit editing"
+                />
+                <View style={{height: 20}}/>
             </ScrollView>
         );
     }
@@ -106,16 +148,15 @@ export class EditPost extends React.Component {
      * 
      * @param {string} caption 
      */
-    handleCaptionEdit(caption) {
+    onCaptionEdit(caption) {
         this.setState({
             caption,
         })
     }
     /**
-     * 
      * @param {string} hashtags 
      */
-    handleHashtagsEdit(hashtags) {
+    onHashtagsEdit(hashtags) {
         const hashtagList = "#" + hashtags
             .split(" ")
             .map(h =>  h.trim().replace("#", ""))
@@ -127,10 +168,9 @@ export class EditPost extends React.Component {
         })
     }
     /**
-     * 
      * @param {boolean} isAdded 
      */
-    handleAddHashtagsToCaption(isAdded) {
+    onAddHashtagsToCaption(isAdded) {
         this.setState({
             hashtagsAddedToCaption: isAdded,
         });
@@ -144,5 +184,35 @@ export class EditPost extends React.Component {
                 caption: this.state.caption.replace(this.state.hashtags, "").trim(),
             })
         }
+    }
+    onImageEdit() {
+        // TODO: Add android support
+        ImagePickerIOS.openSelectDialog(
+            {},
+            imageUri => {
+                this.setState({
+                    imageUri,
+                })
+            },
+            error => {/**/}
+        )
+    }
+    onFocus() {
+        this.setState({isFocused: true});
+    }
+    onEndEditing() {
+        this.setState({ isFocused: false });
+    }
+    /**
+     * @param {string} remindDate 
+     */
+    onDateChange(remindDate) {
+        this.setState({
+            remindDate,
+        })
+    }
+    onSubmit() {
+        console.log(this.props.navigation.state.params)
+        console.log(this.state)
     }
 }

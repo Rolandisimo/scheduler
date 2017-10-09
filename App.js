@@ -8,7 +8,7 @@ import {
     DrawerNavigator,
     StackNavigator,
 } from "react-navigation";
-import { createStore, combineReducers } from "redux";
+import { createStore } from "redux";
 import { Provider } from "react-redux";
 import FAIcon from "react-native-vector-icons/FontAwesome";
 
@@ -68,10 +68,28 @@ export const Drawer = DrawerNavigator({
     },
 });
 
+
+function configureStore() {
+    const store = createStore(reducer);
+
+    // TODO: Awaits webpack. Investigate migration option
+    // Fixes issue of hot reloading reducers
+    // which is prohibited to do on the fly now in react-redux
+    if (module.hot) {
+        // Enable Webpack hot module replacement for reducers
+        module.hot.accept("./src/ducks/common", () => {
+        const nextRootReducer = require("./src/ducks/common");
+        store.replaceReducer(nextRootReducer);
+        });
+    }
+
+    return store;
+}
+
 export default class App extends React.Component {
     render() {
         return (
-            <Provider store={createStore(reducer)}>
+            <Provider store={configureStore()}>
                 <Drawer />
             </Provider>
         );
