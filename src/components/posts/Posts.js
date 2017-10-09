@@ -4,7 +4,7 @@ import { VirtualizedList, Text } from "react-native";
 import { connect } from "react-redux";
 import { List } from "immutable";
 
-import { Post } from "./components/post/Post";
+import { PostConnected } from "./components/post/Post";
 import {
     publishPost,
     getPosts,
@@ -37,7 +37,8 @@ export class Posts extends React.Component {
 
     renderPosts(item) {
         return (
-            <Post
+            <PostConnected
+                index={item.index}
                 post={item.item}
                 handlePublish={() => this.props.handlePublish(item.index)}
                 navigation={this.props.navigation}

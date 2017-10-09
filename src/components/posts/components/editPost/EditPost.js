@@ -15,10 +15,16 @@ import {
 } from "react-native";
 import FAIcon from "react-native-vector-icons/FontAwesome"
 import DatePicker from "react-native-datepicker"
+import { connect } from "react-redux";
 
+import {
+    submitEditPost,
+    getCurrentlyEditingIndex,
+} from "../../../../ducks/common";
 import { PostStatus } from "../postStatus/PostStatus";
 import { PostImageConnected } from "../postImage/PostImage";
 import { PostBody } from "../postBody/PostBody";
+import { formatDate } from "./utils";
 import styles, { datePickerCustomStyles } from "./styles";
 
 export class EditPost extends React.Component {
@@ -37,6 +43,7 @@ export class EditPost extends React.Component {
                 routeName: PropTypes.string,
             }),
         }),
+        onSubmitEdit: PropTypes.func.isRequired,
     };
     state = {
         caption: this.props.navigation.state.params.caption,
@@ -83,6 +90,7 @@ export class EditPost extends React.Component {
             style={styles.datePicker}
             androidMode="spinner"
             customStyles={datePickerCustomStyles}
+            mode="datetime"
         />;
 
         return (
@@ -157,7 +165,7 @@ export class EditPost extends React.Component {
      * @param {string} hashtags 
      */
     onHashtagsEdit(hashtags) {
-        const hashtagList = "#" + hashtags
+        const hashtagList = "#" + hashtags.trim()
             .split(" ")
             .map(h =>  h.trim().replace("#", ""))
             .join(" #")
@@ -212,7 +220,41 @@ export class EditPost extends React.Component {
         })
     }
     onSubmit() {
-        console.log(this.props.navigation.state.params)
-        console.log(this.state)
+        const originalPost = this.props.navigation.state.params;
+        /**
+         * post: PropTypes.shape({
+                url: PropTypes.string,
+                avatar: PropTypes.string,
+                date: PropTypes.string,
+                caption: PropTypes.string,
+                author: PropTypes.string,
+                ready: PropTypes.bool,
+            }),
+         */
+
+        const post = {
+            url: this.state.imageUri || originalPost.url,
+            avatar: originalPost.avatar,
+            date: this.state.remindDate ? formatDate(this.state.remindDate) : originalPost.date,
+            caption: this.state.caption,
+            author: originalPost.author,
+            ready: true,
+        };
+
+        this.props.onSubmitEdit(post, this.props.index);
+        this.props.navigation.goBack()
     }
 }
+
+const mapStateToProps = state => ({
+    index: getCurrentlyEditingIndex(state),
+})
+
+const mapDispatchToProps = {
+    onSubmitEdit: submitEditPost,
+};
+
+export const EditPostConnected = connect(
+    mapStateToProps,
+    mapDispatchToProps,
+)(EditPost);

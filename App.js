@@ -18,7 +18,7 @@ import { Header } from "./src/components/header/Header";
 import { EditScreen } from "./src/components/edit-screen/EditScreen";
 import styles from "./AppStyles";
 import { Post } from "./src/components/posts/components/post/Post";
-import { EditPost } from "./src/components/posts/components/editPost/EditPost";
+import { EditPostConnected } from "./src/components/posts/components/editPost/EditPost";
 
 const mapNavigationStateParamsToProps = (SomeComponent) => {
     return class extends React.Component {
@@ -42,8 +42,8 @@ const Stacks = StackNavigator({
         },
     },
     EditPost: {
-        screen: EditPost,
-        navigationOptions:  ({ navigation }) => { // For more complex titles, options
+        screen: EditPostConnected,
+        navigationOptions:  ({ navigation }) => { // For more complex titles, options)
             return {
                 title: "Edit post",
             };
